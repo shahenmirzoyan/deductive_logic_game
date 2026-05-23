@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Logic Flip</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="panel challenge-panel">
+        <div class="challenge-copy">
+          <p class="prompt" id="prompt-text">
+            Does every card with a black side have a white reverse side?
+          </p>
+        </div>
+
+        <div class="counter-row">
+          <p class="counter-pill">Cards checked: <strong id="flip-count">0</strong></p>
+        </div>
+
+        <div class="table-wrap">
+          <div class="table-glow"></div>
+          <div class="card-row" id="card-row" aria-label="Logic cards"></div>
+        </div>
+
+        <div class="controls">
+          <button id="answer-yes-btn" class="action action-primary">Yes</button>
+          <button id="answer-no-btn" class="action action-primary">No</button>
+          <button id="reset-btn" class="action action-secondary">Reset</button>
+        </div>
+
+        <button
+          id="next-level-btn"
+          class="next-level"
+          type="button"
+          aria-label="Go to next level"
+        >
+          →
+        </button>
+
+        <div class="message-panel" id="message-panel" aria-live="polite">
+          <p class="message-title" id="message-title">Test the rule.</p>
+          <p class="message-body" id="message-body">
+            Flip cards freely, then answer the question.
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <script src="./logic_backend.js"></script>
+    <script src="./script.js"></script>
+  </body>
+</html>
