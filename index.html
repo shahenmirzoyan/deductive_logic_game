@@ -37,12 +37,23 @@
         </div>
 
         <button
+          id="prev-level-btn"
+          class="level-nav level-nav-prev"
+          type="button"
+          aria-label="Go to previous level"
+        >
+          <span class="level-nav-arrow">←</span>
+          <span id="prev-level-label">Level 1</span>
+        </button>
+
+        <button
           id="next-level-btn"
-          class="next-level"
+          class="level-nav level-nav-next"
           type="button"
           aria-label="Go to next level"
         >
-          →
+          <span id="next-level-label">Level 2</span>
+          <span class="level-nav-arrow">→</span>
         </button>
 
         <div class="message-panel" id="message-panel" aria-live="polite">

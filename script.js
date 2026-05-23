@@ -6,7 +6,7 @@ const {
 
 const COLORS = ["white", "red", "black"];
 
-const levels = [
+const baseLevels = [
   {
     prompt: "Is there a white card with a black reverse side?",
     rule: {
@@ -27,6 +27,8 @@ const levels = [
   },
 ];
 
+const generatedLevels = new Map();
+
 const state = {
   cards: [],
   distinctChecks: 0,
@@ -46,10 +48,21 @@ const messagePanel = document.getElementById("message-panel");
 const answerYesBtn = document.getElementById("answer-yes-btn");
 const answerNoBtn = document.getElementById("answer-no-btn");
 const resetBtn = document.getElementById("reset-btn");
+const prevLevelBtn = document.getElementById("prev-level-btn");
 const nextLevelBtn = document.getElementById("next-level-btn");
+const prevLevelLabel = document.getElementById("prev-level-label");
+const nextLevelLabel = document.getElementById("next-level-label");
 
 function getLevel() {
-  return levels[state.levelIndex];
+  if (state.levelIndex < baseLevels.length) {
+    return baseLevels[state.levelIndex];
+  }
+
+  if (!generatedLevels.has(state.levelIndex)) {
+    generatedLevels.set(state.levelIndex, buildGeneratedLevel(state.levelIndex));
+  }
+
+  return generatedLevels.get(state.levelIndex);
 }
 
 function shuffle(items) {
@@ -61,6 +74,44 @@ function shuffle(items) {
   }
 
   return copy;
+}
+
+function buildGeneratedLevel(levelIndex) {
+  const kind = levelIndex % 2 === 0 ? "existential" : "universal";
+  const colorPool = shuffle(COLORS);
+  const oneSide = colorPool[0];
+  const otherSide = colorPool[1];
+
+  return {
+    prompt:
+      kind === "existential"
+        ? `Is there a card with ${oneSide} on one side and ${otherSide} on the other?`
+        : `Does every card with a ${oneSide} side have a ${otherSide} reverse side?`,
+    rule: {
+      kind,
+      one_side: oneSide,
+      other_side: otherSide,
+    },
+    fronts: buildRandomFronts(kind, oneSide, otherSide),
+  };
+}
+
+function buildRandomFronts(kind, oneSide, otherSide) {
+  const fronts = [];
+
+  if (kind === "existential") {
+    fronts.push(oneSide, otherSide);
+  } else {
+    fronts.push(oneSide);
+    const nonOther = COLORS.filter((color) => color !== otherSide);
+    fronts.push(randomChoice(nonOther));
+  }
+
+  while (fronts.length < 4) {
+    fronts.push(randomChoice(COLORS));
+  }
+
+  return shuffle(fronts);
 }
 
 function createLevelCards(fronts) {
@@ -143,10 +194,10 @@ function syncBoard() {
   flipCount.textContent = String(state.distinctChecks);
   answerYesBtn.disabled = state.answered;
   answerNoBtn.disabled = state.answered;
-  nextLevelBtn.classList.toggle(
-    "is-visible",
-    state.optimalWin && state.levelIndex < levels.length - 1
-  );
+  prevLevelBtn.classList.toggle("is-visible", state.levelIndex > 0);
+  nextLevelBtn.classList.add("is-visible");
+  prevLevelLabel.textContent = `Level ${state.levelIndex}`;
+  nextLevelLabel.textContent = `Level ${state.levelIndex + 2}`;
   state.cards.forEach(syncCardElement);
 }
 
@@ -601,10 +652,13 @@ function loadLevel(levelIndex) {
 answerYesBtn.addEventListener("click", () => evaluateAnswer(true));
 answerNoBtn.addEventListener("click", () => evaluateAnswer(false));
 resetBtn.addEventListener("click", () => loadLevel(state.levelIndex));
-nextLevelBtn.addEventListener("click", () => {
-  if (state.levelIndex < levels.length - 1) {
-    loadLevel(state.levelIndex + 1);
+prevLevelBtn.addEventListener("click", () => {
+  if (state.levelIndex > 0) {
+    loadLevel(state.levelIndex - 1);
   }
+});
+nextLevelBtn.addEventListener("click", () => {
+  loadLevel(state.levelIndex + 1);
 });
 
 loadLevel(0);

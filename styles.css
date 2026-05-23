@@ -327,32 +327,53 @@ h1 {
   justify-content: center;
 }
 
-.next-level {
+.level-nav {
   position: absolute;
   top: 50%;
-  right: 1rem;
   z-index: 3;
-  width: 58px;
-  height: 58px;
   border: 0;
   border-radius: 999px;
   background: linear-gradient(135deg, #f3b043, #cb5a25);
   color: white;
   font: inherit;
-  font-size: 2rem;
-  line-height: 1;
+  font-weight: 700;
+  line-height: 1.1;
   box-shadow: 0 14px 24px rgba(127, 36, 20, 0.24);
   cursor: pointer;
   opacity: 0;
   pointer-events: none;
-  transform: translateY(-50%) translateX(14px) scale(0.9);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1rem;
   transition: opacity 220ms ease, transform 220ms ease;
 }
 
-.next-level.is-visible {
+.level-nav-next {
+  right: 1rem;
+  transform: translateY(-50%) translateX(14px) scale(0.9);
+}
+
+.level-nav-prev {
+  left: 1rem;
+  transform: translateY(-50%) translateX(-14px) scale(0.9);
+}
+
+.level-nav.is-visible {
   opacity: 1;
   pointer-events: auto;
+}
+
+.level-nav-next.is-visible {
   transform: translateY(-50%) translateX(0) scale(1);
+}
+
+.level-nav-prev.is-visible {
+  transform: translateY(-50%) translateX(0) scale(1);
+}
+
+.level-nav-arrow {
+  font-size: 1.5rem;
 }
 
 .action {
@@ -456,14 +477,21 @@ h1 {
     width: min(148px, 43vw);
   }
 
-  .next-level {
+  .level-nav {
     position: static;
-    display: block;
+    display: inline-flex;
     margin: 0.5rem auto 0;
+  }
+
+  .level-nav-next {
     transform: translateY(0) translateX(14px) scale(0.9);
   }
 
-  .next-level.is-visible {
+  .level-nav-prev {
+    transform: translateY(0) translateX(-14px) scale(0.9);
+  }
+
+  .level-nav.is-visible {
     transform: translateY(0) translateX(0) scale(1);
   }
 }
